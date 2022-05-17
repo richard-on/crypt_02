@@ -111,10 +111,10 @@ std::istream& safeGetline(std::istream& is, std::string& t)
 int main() {
     std::string fileName = "secret.bz2.crypt";
     std::string in;
-    std::string inputBuffer;
+    std::string inputBuffer;// = new char[1024];
     int n = 0;
 
-    std::fstream fin(fileName, std::ios::binary | std::ios::in);
+    std::fstream fin(fileName, std::ios::in | std::ios::out | std::ios::binary);
     /*while(!safeGetline(fin, in).eof()) {
         ++n;
         inputBuffer += in;
@@ -122,13 +122,20 @@ int main() {
     inputBuffer += "\n";*/
 
     //fin.read(inputBuffer, 167);
-    //fin >> inputBuffer;
-    while(inputBuffer.size() < 168) {
-        inputBuffer += fin.rdbuf()->sbumpc();
+    while (n <= 6) {
+        n++;
+        fin >> in;
+        inputBuffer += in;
     }
+    /*fin >> inputBuffer;
+    fin >> inputBuffer;
+    fin >> inputBuffer;*/
+    /*while(inputBuffer.size() < 168) {
+        inputBuffer += fin.rdbuf()->sbumpc();
+    }*/
 
     fin.close();
-    std::fstream fout("secret.bz2");
+    std::fstream fout("secret.bz2", std::ios::in | std::ios::out | std::ios::binary);
     fout << inputBuffer;
     fout.close();
 
